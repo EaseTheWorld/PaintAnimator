@@ -28,13 +28,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class MultirowBgListTest extends Activity {
 	
-	private AniListView mList;
+	private ListView mList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,29 +42,11 @@ public class MultirowBgListTest extends Activity {
         
         String[] data = new String[100];
         for (int i=0; i<data.length; i++)
-        	data[i] = "Data "+i;
+        	data[i] = "Data "+(i+1);
         
-        findViewById(android.R.id.button1).setOnClickListener(mClickListener);
-        findViewById(android.R.id.button2).setOnClickListener(mClickListener);
-        
-        mList = (AniListView)findViewById(android.R.id.list);
+        mList = (ListView)findViewById(android.R.id.list);
         mList.setAdapter(new MyAdapter(this, data));
     }
-    
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			switch(v.getId()) {
-			case android.R.id.button1:
-				mList.animate(true);
-				break;
-			case android.R.id.button2:
-				mList.animate(false);
-				break;
-			}
-		}
-	};
 
     private static class MyAdapter extends ArrayAdapter<String> {
 
@@ -81,7 +62,7 @@ public class MultirowBgListTest extends Activity {
 			}
 			MultirowBackgroundView v = (MultirowBackgroundView)convertView;
 			v.setText(getItem(position));
-			v.setTextSize(20);
+			v.setTextSize(24);
 			return convertView;
 		}
     }
@@ -93,40 +74,32 @@ public class MultirowBgListTest extends Activity {
      */
     private static class MultirowBackgroundView extends TextView {
     	
-    	private AniListView mParent;
+    	private ListView mParent;
     	private Paint mPaint;
     	private Bitmap mBitmap;
-//    	private PaintPropertyAnimator mAnimator;
     	
 		public MultirowBackgroundView(Context context) {
 			super(context);
 			
             mBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-//			mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//			mPaint.setColor(0xffffcccc);
-//            mPaint.setTextAlign(Paint.Align.CENTER);
-//            mAnimator = PaintPropertyAnimator.ofColor(mPaint, mPaint.getColor(), 0xff0000ff).withInvalidate(this);
-//            setOnClickListener(new View.OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					mAnimator.toggle();
-//				}
-//			});
+			mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+			mPaint.setTextAlign(Paint.Align.CENTER);
+			mPaint.setColor(0x40ff0000);
 		}
 		
 		@Override
 		protected void onDraw(Canvas canvas) {
 			// to get current position, use parent ListView.
 			if (mParent == null)
-				mParent = (AniListView)getParent();
+				mParent = (ListView)getParent();
 			int pos = mParent.getPositionForView(this);
 			
-			Paint paint = mParent.getItemPaint();
+			Paint paint = mPaint;
 			// text
-			int spanRows = 6;
-			int a = pos / spanRows * spanRows;
+			int spanRows = 5;
+			int a = pos / spanRows * spanRows + 1;
 			int b = a + spanRows - 1;
-			drawMultirowBackgroundText(canvas, a + "-" + b, paint, spanRows, 4, pos % spanRows, getWidth() / 2);
+			drawMultirowBackgroundText(canvas, a + "-" + b, paint, spanRows, 3, pos % spanRows, getWidth() / 2);
 			
 			// image
 			spanRows = 4;
