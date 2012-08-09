@@ -4,16 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <Button android:id="@android:id/button1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Animation Start"/>
-    
-    <Button android:id="@android:id/button2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Animation Reverse"/>
-    
     <com.easetheworld.multirowbglisttest.AniListView
         android:id="@android:id/list"
         android:layout_width="match_parent"

@@ -41,18 +41,20 @@ public class AniListView extends ListView {
 		mAnimatorSet = new PaintAnimatorSet();
 		
 		mListPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		mListPaint.setColor(Color.RED);
 		mListPaint.setTextSize(40);
 		mListPaint.setTextAlign(Paint.Align.CENTER);
-		mAnimatorSet.add(PaintAnimator.ofColor(mListPaint, Color.BLUE));
-		mAnimatorSet.add(PaintAnimator.ofTextSize(mListPaint, 80));
+		mListPaint.setColor(0xff0000ff);
+		mAnimatorSet.add(PaintAnimator.ofColor(mListPaint, 0x000000ff));
+//		mListPaint.setColor(0x408080ff);
+//		mAnimatorSet.add(PaintAnimator.ofColor(mListPaint, 0xff0000ff));
+//		mAnimatorSet.add(PaintAnimator.ofTextSize(mListPaint, 80));
 		
 		mItemBgPaint = new Paint();
-		mItemBgPaint.setColor(Color.YELLOW);
 		mItemBgPaint.setTextAlign(Paint.Align.CENTER);
-		mAnimatorSet.add(PaintAnimator.ofColor(mItemBgPaint, Color.GREEN));
+		mItemBgPaint.setColor(0x40ff8080);
+		mAnimatorSet.add(PaintAnimator.ofColor(mItemBgPaint, 0xc0ff0000));
 		
-		mAnimatorSet.setDuration(3000);
+		mAnimatorSet.setDuration(1000);
 		mAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
 			@Override
 			public void onInvalidate() {

@@ -4,19 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
+    <TextView android:id="@android:id/text1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    
     <Button android:id="@android:id/button1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Animation Start"/>
+        android:layout_height="wrap_content" />
     
     <Button android:id="@android:id/button2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Animation Reverse"/>
+        android:layout_height="wrap_content" />
     
-    <com.easetheworld.multirowbglisttest.AniListView
-        android:id="@android:id/list"
+    <com.easetheworld.multirowbglisttest.CanvasView
+        android:id="@+id/canvas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:text="Click me."/>
 
 </LinearLayout>

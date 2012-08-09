@@ -21,15 +21,14 @@ package com.easetheworld.multirowbglisttest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class MultirowBgListPaintAnimatorTest extends Activity {
@@ -43,29 +42,25 @@ public class MultirowBgListPaintAnimatorTest extends Activity {
         
         String[] data = new String[100];
         for (int i=0; i<data.length; i++)
-        	data[i] = "Data "+i;
-        
-        findViewById(android.R.id.button1).setOnClickListener(mClickListener);
-        findViewById(android.R.id.button2).setOnClickListener(mClickListener);
+        	data[i] = "Data "+(i+1);
         
         mList = (AniListView)findViewById(android.R.id.list);
         mList.setAdapter(new MyAdapter(this, data));
-    }
-    
-    private View.OnClickListener mClickListener = new View.OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			switch(v.getId()) {
-			case android.R.id.button1:
-				mList.animate(true);
-				break;
-			case android.R.id.button2:
-				mList.animate(false);
-				break;
+        mList.setOnScrollListener(new OnScrollListener() {
+        	private boolean mIsScrolling = false;
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) { }
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				boolean isScrolling = scrollState != OnScrollListener.SCROLL_STATE_IDLE;
+				if (isScrolling != mIsScrolling) {
+					mList.animate(isScrolling);
+					mIsScrolling = isScrolling;
+				}
 			}
-		}
-	};
+        });
+    }
 
     private static class MyAdapter extends ArrayAdapter<String> {
 
@@ -81,7 +76,7 @@ public class MultirowBgListPaintAnimatorTest extends Activity {
 			}
 			MultirowBackgroundView v = (MultirowBackgroundView)convertView;
 			v.setText(getItem(position));
-			v.setTextSize(20);
+			v.setTextSize(24);
 			return convertView;
 		}
     }
@@ -94,24 +89,9 @@ public class MultirowBgListPaintAnimatorTest extends Activity {
     private static class MultirowBackgroundView extends TextView {
     	
     	private AniListView mParent;
-    	private Paint mPaint;
-    	private Bitmap mBitmap;
-//    	private PaintPropertyAnimator mAnimator;
     	
 		public MultirowBackgroundView(Context context) {
 			super(context);
-			
-            mBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher);
-//			mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-//			mPaint.setColor(0xffffcccc);
-//            mPaint.setTextAlign(Paint.Align.CENTER);
-//            mAnimator = PaintPropertyAnimator.ofColor(mPaint, mPaint.getColor(), 0xff0000ff).withInvalidate(this);
-//            setOnClickListener(new View.OnClickListener() {
-//				@Override
-//				public void onClick(View v) {
-//					mAnimator.toggle();
-//				}
-//			});
 		}
 		
 		@Override
@@ -122,15 +102,12 @@ public class MultirowBgListPaintAnimatorTest extends Activity {
 			int pos = mParent.getPositionForView(this);
 			
 			Paint paint = mParent.getItemPaint();
+			
 			// text
 			int spanRows = 6;
-			int a = pos / spanRows * spanRows;
+			int a = pos / spanRows * spanRows + 1;
 			int b = a + spanRows - 1;
 			drawMultirowBackgroundText(canvas, a + "-" + b, paint, spanRows, 4, pos % spanRows, getWidth() / 2);
-			
-			// image
-			spanRows = 4;
-			drawMultirowBackgroundBitmap(canvas, mBitmap, paint, spanRows, pos % spanRows, getWidth() - mBitmap.getWidth());
 			
 			super.onDraw(canvas);
 		}

@@ -16,28 +16,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MultirowBgListTest"
-            android:label="Multirow Bg List">
+        <activity android:name=".PaintAnimatorTest" android:label="PaintAnimator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.easetheworld.category.SAMPLE_CODE" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".PaintAnimatorTest"
-            android:label="Paint Animator">
+        <activity android:name=".PaintAnimatorSetTest" android:label="PaintAnimatorSet">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.easetheworld.category.SAMPLE_CODE" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MultirowBgListPaintAnimatorTest"
-            android:label="Multirow Bg List, Paint ani">
+        <activity android:name=".ChangingZOrderTest" android:label="Changing Z-Order">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="com.easetheworld.category.SAMPLE_CODE" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MultirowBgListTest" android:label="Multirow Bg List">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".MultirowBgListPaintAnimatorTest" android:label="Multirow Bg List, Paint ani">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
     </application>

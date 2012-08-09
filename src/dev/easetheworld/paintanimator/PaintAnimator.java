@@ -21,8 +21,8 @@ package dev.easetheworld.paintanimator;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.nineoldandroids.animation.ArgbEvaluator;
 import com.nineoldandroids.animation.FloatEvaluator;
+import com.nineoldandroids.animation.IntEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
@@ -30,9 +30,11 @@ import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 public class PaintAnimator {
 	
 	private static final int COLOR = 1;
-	private static final int TEXT_SIZE = 2;
+	private static final int ALPHA = 2;
+	private static final int TEXT_SIZE = 3;
 	
-	private static final ArgbEvaluator sArgbEvaluator = new ArgbEvaluator();
+	private static final ArgbEvaluator2 sArgbEvaluator = new ArgbEvaluator2();
+	private static final IntEvaluator sIntEvaluator = new IntEvaluator();
 	private static final FloatEvaluator sFloatEvaluator = new FloatEvaluator();
 	
 	private final Paint mPaint;
@@ -56,6 +58,18 @@ public class PaintAnimator {
 	
 	public static PaintAnimator ofColor(Paint paint, int... value) {
 		PaintAnimator animator = new PaintAnimator(paint, COLOR);
+		if (value.length == 1) {
+			animator.mStart = animator.getValue();
+			animator.mEnd = value[0];
+		} else {
+			animator.mStart = value[0];
+			animator.mEnd = value[value.length - 1];
+		}
+		return animator;
+	}
+	
+	public static PaintAnimator ofAlpha(Paint paint, int... value) {
+		PaintAnimator animator = new PaintAnimator(paint, ALPHA);
 		if (value.length == 1) {
 			animator.mStart = animator.getValue();
 			animator.mEnd = value[0];
@@ -92,9 +106,17 @@ public class PaintAnimator {
 		return mDuration;
 	}
 	
-	private boolean mPlayForward = true;
+	public float getFraction() {
+		if (mAnimator == null)
+			return 0f;
+		else
+			return mAnimator.getAnimatedFraction();
+	}
+	
+	private boolean mPlayForward = false;
 	
 	public void animate(boolean playForward) {
+		createAnimator();
 		if (mAnimator.isRunning()) {
 			if (playForward != mPlayForward)
 				mAnimator.reverse();
@@ -107,15 +129,26 @@ public class PaintAnimator {
 		mPlayForward = playForward;
 	}
 	
-	void setFractionAndInvalidate(float fraction) {
+	public void toggle() {
+		animate(!mPlayForward);
+	}
+	
+	private void setFraction(float fraction) {
 		switch(mField) {
 		case COLOR:
-			mPaint.setColor((Integer)sArgbEvaluator.evaluate(fraction, (Integer)mStart, (Integer)mEnd));
+			mPaint.setColor((Integer)sArgbEvaluator.evaluate(fraction, mStart, mEnd));
+			break;
+		case ALPHA:
+			mPaint.setAlpha(sIntEvaluator.evaluate(fraction, (Integer)mStart, (Integer)mEnd));
 			break;
 		case TEXT_SIZE:
 			mPaint.setTextSize(sFloatEvaluator.evaluate(fraction, (Number)mStart, (Number)mEnd));
 			break;
 		}
+	}
+	
+	void setFractionAndInvalidate(float fraction) {
+		setFraction(fraction);
 		if (mViews != null) {
 			for (View v : mViews)
 				v.invalidate();
@@ -126,6 +159,8 @@ public class PaintAnimator {
 		switch(mField) {
 		case COLOR:
 			return mPaint.getColor();
+		case ALPHA:
+			return mPaint.getAlpha();
 		case TEXT_SIZE:
 			return mPaint.getTextSize();
 		}
@@ -138,8 +173,9 @@ public class PaintAnimator {
 				mAnimator = ValueAnimator.ofInt((Integer)mStart, (Integer)mEnd);
 			else if (mStart instanceof Float)
 				mAnimator = ValueAnimator.ofFloat((Float)mStart, (Float)mEnd);
-			else
-				mAnimator = ValueAnimator.ofObject(null , mStart, mEnd);
+			else {
+				throw new IllegalArgumentException("Integer and Float only");
+			}
 			if (mDuration > 0)
 				mAnimator.setDuration(mDuration);
 			mAnimator.setInterpolator(null);

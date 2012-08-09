@@ -66,12 +66,20 @@ public class PaintAnimatorSet {
 		mPlayForward = playForward;
 	}
 	
+	public void toggle() {
+		animate(!mPlayForward);
+	}
+	
 	public void setDuration(long duration) {
 		mAnimator.setDuration(duration);
 	}
 	
 	public long getDuration() {
 		return mAnimator.getDuration();
+	}
+	
+	public float getFraction() {
+		return mAnimator.getAnimatedFraction();
 	}
 	
 	public static interface OnInvalidateListener {

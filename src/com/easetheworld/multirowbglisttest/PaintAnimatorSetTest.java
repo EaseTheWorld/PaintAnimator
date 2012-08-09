@@ -34,16 +34,16 @@ import android.widget.Toast;
 import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
 
 import dev.easetheworld.paintanimator.PaintAnimator;
+import dev.easetheworld.paintanimator.PaintAnimatorSet;
 
-public class PaintAnimatorTest extends Activity {
+public class PaintAnimatorSetTest extends Activity {
 	
 	private CanvasView mCanvasView;
 	
 	private Paint mPaint1;
-	private PaintAnimator mPaint1TextSizeAnimator;
-	
 	private Paint mPaint2;
-	private PaintAnimator mPaint2ColorAnimator;
+	
+	private PaintAnimatorSet mPaintAnimatorSet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,14 +51,14 @@ public class PaintAnimatorTest extends Activity {
         setContentView(R.layout.buttons_canvas);
         
         TextView text1 = (TextView)findViewById(android.R.id.text1);
-        text1.setText("If you use PaintAnimator, each animation is independent.");
+        text1.setText("If you want to animate Paints at the same time, use PaintAnimatorSet.");
         
         Button button1 = (Button)findViewById(android.R.id.button1);
-        button1.setText("Paint1 Text Size : 30 <-> 60");
+        button1.setText("Animate forward");
         button1.setOnClickListener(mClickListener);
         
         Button button2 = (Button)findViewById(android.R.id.button2);
-        button2.setText("Paint2 Color : Blue <-> Red");
+        button2.setText("Animate backward");
         button2.setOnClickListener(mClickListener);
         
         mCanvasView = (CanvasView)findViewById(R.id.canvas);
@@ -76,8 +76,16 @@ public class PaintAnimatorTest extends Activity {
         mPaint2.setStyle(Paint.Style.STROKE);
         mPaint2.setTextSize(getScaledTextSize(this, 30));
         
-        mPaint1TextSizeAnimator = PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)).setDuration(1000).setInvalidateViews(mCanvasView);
-        mPaint2ColorAnimator = PaintAnimator.ofColor(mPaint2, Color.RED).setDuration(1000).setInvalidateViews(mCanvasView);
+        mPaintAnimatorSet = new PaintAnimatorSet();
+        mPaintAnimatorSet.add(PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)));
+        mPaintAnimatorSet.add(PaintAnimator.ofColor(mPaint2, Color.RED));
+        mPaintAnimatorSet.setDuration(2000);
+        mPaintAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
+			@Override
+			public void onInvalidate() {
+				mCanvasView.invalidate();
+			}
+        });
     }
     
     private CanvasView.OnDrawListener mDrawListener = new OnDrawListener() {
@@ -96,10 +104,10 @@ public class PaintAnimatorTest extends Activity {
 		public void onClick(View v) {
 			switch(v.getId()) {
 			case android.R.id.button1:
-				mPaint1TextSizeAnimator.toggle();
+				mPaintAnimatorSet.animate(true);
 				break;
 			case android.R.id.button2:
-				mPaint2ColorAnimator.toggle();
+				mPaintAnimatorSet.animate(false);
 				break;
 			case R.id.canvas:
 				Toast.makeText(v.getContext(), "Clicked.", Toast.LENGTH_SHORT).show();

@@ -33,17 +33,20 @@ import android.widget.Toast;
 
 import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
 
+import dev.easetheworld.paintanimator.CanvasLayerManager;
+import dev.easetheworld.paintanimator.CanvasLayerManager.CanvasLayer;
 import dev.easetheworld.paintanimator.PaintAnimator;
+import dev.easetheworld.paintanimator.PaintAnimatorSet;
 
-public class PaintAnimatorTest extends Activity {
+public class ChangingZOrderTest extends Activity {
 	
 	private CanvasView mCanvasView;
+	private CanvasLayerManager mCanvasLayerManager;
 	
-	private Paint mPaint1;
-	private PaintAnimator mPaint1TextSizeAnimator;
+	private Paint mPaintR;
+	private Paint mPaintB;
 	
-	private Paint mPaint2;
-	private PaintAnimator mPaint2ColorAnimator;
+	private PaintAnimatorSet mPaintAnimatorSet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,43 +54,75 @@ public class PaintAnimatorTest extends Activity {
         setContentView(R.layout.buttons_canvas);
         
         TextView text1 = (TextView)findViewById(android.R.id.text1);
-        text1.setText("If you use PaintAnimator, each animation is independent.");
+        text1.setText("Change the z-order of overlapped layers by alpha and drawing order.");
         
         Button button1 = (Button)findViewById(android.R.id.button1);
-        button1.setText("Paint1 Text Size : 30 <-> 60");
+        button1.setText("Blue to the top.");
         button1.setOnClickListener(mClickListener);
         
         Button button2 = (Button)findViewById(android.R.id.button2);
-        button2.setText("Paint2 Color : Blue <-> Red");
+        button2.setText("Red to the top.");
         button2.setOnClickListener(mClickListener);
         
         mCanvasView = (CanvasView)findViewById(R.id.canvas);
         mCanvasView.setOnClickListener(mClickListener);
         mCanvasView.setOnDrawListener(mDrawListener);
         
-        mPaint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint1.setColor(Color.GREEN);
-        mPaint1.setTextAlign(Paint.Align.CENTER);
-        mPaint1.setTextSize(getScaledTextSize(this, 30));
+        mPaintR = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintR.setColor(Color.RED);
+        mPaintR.setAlpha(0xff);
         
-        mPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint2.setColor(Color.BLUE);
-        mPaint2.setTextAlign(Paint.Align.CENTER);
-        mPaint2.setStyle(Paint.Style.STROKE);
-        mPaint2.setTextSize(getScaledTextSize(this, 30));
+        mPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintB.setColor(Color.BLUE);
+        mPaintB.setAlpha(0x80);
         
-        mPaint1TextSizeAnimator = PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)).setDuration(1000).setInvalidateViews(mCanvasView);
-        mPaint2ColorAnimator = PaintAnimator.ofColor(mPaint2, Color.RED).setDuration(1000).setInvalidateViews(mCanvasView);
+        mPaintAnimatorSet = new PaintAnimatorSet();
+        mPaintAnimatorSet.add(PaintAnimator.ofAlpha(mPaintR, 0x80));
+        mPaintAnimatorSet.add(PaintAnimator.ofAlpha(mPaintB, 0xff));
+        mPaintAnimatorSet.setDuration(1000);
+        mPaintAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
+			@Override
+			public void onInvalidate() {
+				mCanvasView.invalidate();
+			}
+        });
+        
+		mCanvasLayerManager = new CanvasLayerManager();
+		mCanvasLayerManager.add(new CanvasLayer() {
+			@Override
+			public void onDraw(View v, Canvas canvas) {
+				int ux = v.getWidth() / 9;
+				int uy = v.getHeight() / 9;
+				canvas.drawRect(ux*1, uy*3, ux*4, uy*6, mPaintR);
+				canvas.drawRect(ux*5, uy*3, ux*8, uy*6, mPaintR);
+			}
+
+			@Override
+			public float getZOrder() {
+				return 1f - mPaintAnimatorSet.getFraction();
+			}
+		});
+		
+		mCanvasLayerManager.add(new CanvasLayer() {
+			@Override
+			public void onDraw(View v, Canvas canvas) {
+				int ux = v.getWidth() / 9;
+				int uy = v.getHeight() / 9;
+				canvas.drawRect(ux*3, uy*1, ux*6, uy*4, mPaintB);
+				canvas.drawRect(ux*3, uy*5, ux*6, uy*8, mPaintB);
+			}
+
+			@Override
+			public float getZOrder() {
+				return mPaintAnimatorSet.getFraction();
+			}
+		});
     }
     
     private CanvasView.OnDrawListener mDrawListener = new OnDrawListener() {
     	@Override
     	public void onDraw(View v, Canvas canvas) {
-    		canvas.drawText("Paint1", v.getWidth() / 2, v.getHeight() / 4, mPaint1);
-    		canvas.drawText("Paint1", v.getWidth() / 2, v.getHeight() * 3 / 4, mPaint1);
-    		canvas.drawText("Paint2", v.getWidth() / 4, v.getHeight() / 2, mPaint2);
-    		canvas.drawText("Paint2", v.getWidth() * 3 / 4, v.getHeight() / 2, mPaint2);
-    		canvas.drawRect(20, 20, v.getWidth() - 20, v.getHeight() - 20, mPaint2);
+    		mCanvasLayerManager.draw(v, canvas);
     	}
     };
     
@@ -96,10 +131,10 @@ public class PaintAnimatorTest extends Activity {
 		public void onClick(View v) {
 			switch(v.getId()) {
 			case android.R.id.button1:
-				mPaint1TextSizeAnimator.toggle();
+				mPaintAnimatorSet.animate(true);
 				break;
 			case android.R.id.button2:
-				mPaint2ColorAnimator.toggle();
+				mPaintAnimatorSet.animate(false);
 				break;
 			case R.id.canvas:
 				Toast.makeText(v.getContext(), "Clicked.", Toast.LENGTH_SHORT).show();
@@ -107,9 +142,4 @@ public class PaintAnimatorTest extends Activity {
 			}
 		}
 	};
-	
-	private static float getScaledTextSize(Context context, int size) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, displayMetrics);
-	}
 }
