@@ -21,8 +21,6 @@ package dev.easetheworld.paintanimator;
 import android.graphics.Paint;
 import android.view.View;
 
-import com.nineoldandroids.animation.FloatEvaluator;
-import com.nineoldandroids.animation.IntEvaluator;
 import com.nineoldandroids.animation.ValueAnimator;
 
 public class PaintAnimator2 extends ValueAnimator {
@@ -35,31 +33,34 @@ public class PaintAnimator2 extends ValueAnimator {
 	private static final int STROKE_WIDTH = 6;
 	
 	private static final ArgbEvaluator2 sArgbEvaluator = new ArgbEvaluator2();
-	private static final IntEvaluator sIntEvaluator = new IntEvaluator();
-	private static final FloatEvaluator sFloatEvaluator = new FloatEvaluator();
 	
 	private final Paint mPaint;
 	
 	private final int mField;
 	
-	private View[] mViews;
+	protected View[] mViews;
+	
+	// default constructor for child class
+	protected PaintAnimator2() {
+		this(new Paint(), 0);
+	}
 
 	private PaintAnimator2(Paint paint, int field) {
 		mPaint = paint;
 		mField = field;
-		
 		setInterpolator(null); // linear interpolator is enough because this is not about position.
-		addUpdateListener(new AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator valueAnimator) {
-				setValue(valueAnimator.getAnimatedValue());
-				if (mViews != null) {
-					for (View v : mViews)
-						v.invalidate();
+		if (field > 0) {
+			addUpdateListener(new AnimatorUpdateListener() {
+				@Override
+				public void onAnimationUpdate(ValueAnimator valueAnimator) {
+					setValue(valueAnimator.getAnimatedValue());
+					if (mViews != null) {
+						for (View v : mViews)
+							v.invalidate();
+					}
 				}
-//				setFractionAndInvalidate(valueAnimator.getAnimatedFraction());
-			}
-		});
+			});
+		}
 	}
 	
 	private void setFloatValuesHelper(float... value) {
@@ -118,19 +119,24 @@ public class PaintAnimator2 extends ValueAnimator {
 		return this;
 	}
 	
-	private boolean mPlayForward = false;
+	protected boolean mPlayForward = false;
 	
 	public void animate(boolean playForward) {
-		if (isRunning()) {
-			if (playForward != mPlayForward)
-				reverse();
-		} else {
+		boolean isReverse = playForward != mPlayForward;
+		mPlayForward = playForward;
+		if (!isStarted()) { // if not started, simply start.
 			if (playForward)
 				start();
 			else
 				reverse();
+		} else {
+			if (isReverse) {
+				if (isRunning()) // animating (after delay)
+					reverse();
+				else // during start delay
+					cancel();
+			}
 		}
-		mPlayForward = playForward;
 	}
 	
 	public void toggle() {
