@@ -24,24 +24,30 @@ import android.view.View;
 
 public class CanvasLayerManager {
 	
-	private ArrayList<CanvasLayer> mObjectList;
+	private ArrayList<CanvasLayer> mCanvasLayerList;
 	
 	public CanvasLayerManager() {
-		mObjectList = new ArrayList<CanvasLayer>();
+		mCanvasLayerList = new ArrayList<CanvasLayer>();
 	}
 
 	public final void draw(View v, Canvas canvas) {
-		Collections.sort(mObjectList); // object's z-order can be changed anytime.
-		for (CanvasLayer obj : mObjectList)
+		// sort before every draw because z-order can be changed anytime.
+		if (mCanvasLayerList.size() == 2) { // most common case
+			if (mCanvasLayerList.get(0).compareTo(mCanvasLayerList.get(1)) > 0)
+				Collections.swap(mCanvasLayerList, 0, 1);
+		} else if (mCanvasLayerList.size() > 2) {
+			Collections.sort(mCanvasLayerList);
+		}
+		for (CanvasLayer obj : mCanvasLayerList)
 			obj.onDraw(v, canvas);
 	}
 
 	public final void add(CanvasLayer obj) {
-		mObjectList.add(obj);
+		mCanvasLayerList.add(obj);
 	}
 
 	public final void remove(CanvasLayer obj) {
-		mObjectList.remove(obj);
+		mCanvasLayerList.remove(obj);
 	}
 	
 	public static abstract class CanvasLayer implements Comparable<CanvasLayer> {

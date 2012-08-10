@@ -16,13 +16,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PaintAnimatorTest" android:label="PaintAnimator">
+        <activity android:name=".PaintAnimatorTest" android:label="Animator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".PaintAnimatorSetTest" android:label="PaintAnimatorSet">
+        <activity android:name=".PaintAnimatorSetTest" android:label="AnimatorSet">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_CODE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AnimationSeeking" android:label="Seek">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
@@ -34,13 +40,7 @@
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".MultirowBgListTest" android:label="Multirow Bg List">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MultirowBgListPaintAnimatorTest" android:label="Multirow Bg List, Paint ani">
+        <activity android:name=".WatermarkListTest" android:label="Watermark ListView">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

@@ -20,66 +20,49 @@ package dev.easetheworld.paintanimator;
 
 import java.util.LinkedList;
 
+import android.view.View;
+
 import com.nineoldandroids.animation.ValueAnimator;
-import com.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener;
 
-
-public class PaintAnimatorSet {
-	
-	private ValueAnimator mAnimator;
+public class PaintAnimatorSet extends PaintAnimator {
 	
 	private LinkedList<PaintAnimator> mList = new LinkedList<PaintAnimator>();
 	
 	public PaintAnimatorSet() {
-		mAnimator = ValueAnimator.ofFloat(0f, 1f);
-		mAnimator.addUpdateListener(new AnimatorUpdateListener() {
+		super();
+		setFloatValues(0f, 1f);
+		addUpdateListener(new AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator valueAnimator) {
+				long currentTime = valueAnimator.getCurrentPlayTime();
+				if (currentTime < 0) currentTime = 0;
+				else if (currentTime > valueAnimator.getDuration()) currentTime = valueAnimator.getDuration();
 				for (PaintAnimator ppa : mList)
-					ppa.setFractionAndInvalidate(valueAnimator.getAnimatedFraction());
+					ppa.setCurrentPlayTime((mPlayForward ? currentTime : (valueAnimator.getDuration() - currentTime)));
+				if (mViews != null) {
+					for (View v : mViews)
+						v.invalidate();
+				}
 				if (mOnInvalidateListener != null)
 					mOnInvalidateListener.onInvalidate();
 			}
 		});
 	}
-	
+
+	@Override
+	public ValueAnimator setDuration(long duration) {
+		for (PaintAnimator ppa : mList)
+			ppa.setDuration(duration);
+		return super.setDuration(duration);
+	}
+
 	public void add(PaintAnimator paintAnimator) {
+		paintAnimator.setDuration(getDuration());
 		mList.add(paintAnimator);
 	}
 	
 	public void remove(PaintAnimator paintAnimator) {
 		mList.remove(paintAnimator);
-	}
-	
-	private boolean mPlayForward = true;
-	
-	public void animate(boolean playForward) {
-		if (mAnimator.isRunning()) {
-			if (playForward != mPlayForward)
-				mAnimator.reverse();
-		} else {
-			if (playForward)
-				mAnimator.start();
-			else
-				mAnimator.reverse();
-		}
-		mPlayForward = playForward;
-	}
-	
-	public void toggle() {
-		animate(!mPlayForward);
-	}
-	
-	public void setDuration(long duration) {
-		mAnimator.setDuration(duration);
-	}
-	
-	public long getDuration() {
-		return mAnimator.getDuration();
-	}
-	
-	public float getFraction() {
-		return mAnimator.getAnimatedFraction();
 	}
 	
 	public static interface OnInvalidateListener {

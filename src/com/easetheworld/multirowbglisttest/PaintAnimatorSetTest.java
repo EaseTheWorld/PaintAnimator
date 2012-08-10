@@ -40,10 +40,9 @@ public class PaintAnimatorSetTest extends Activity {
 	
 	private CanvasView mCanvasView;
 	
+	private PaintAnimatorSet mAnimatorSet;
 	private Paint mPaint1;
 	private Paint mPaint2;
-	
-	private PaintAnimatorSet mPaintAnimatorSet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,16 +75,11 @@ public class PaintAnimatorSetTest extends Activity {
         mPaint2.setStyle(Paint.Style.STROKE);
         mPaint2.setTextSize(getScaledTextSize(this, 30));
         
-        mPaintAnimatorSet = new PaintAnimatorSet();
-        mPaintAnimatorSet.add(PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)));
-        mPaintAnimatorSet.add(PaintAnimator.ofColor(mPaint2, Color.RED));
-        mPaintAnimatorSet.setDuration(2000);
-        mPaintAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
-			@Override
-			public void onInvalidate() {
-				mCanvasView.invalidate();
-			}
-        });
+        mAnimatorSet = new PaintAnimatorSet();
+        mAnimatorSet.setDuration(1000);
+        mAnimatorSet.add(PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)));
+        mAnimatorSet.add(PaintAnimator.ofColor(mPaint2, Color.RED));
+		mAnimatorSet.setInvalidateViews(mCanvasView);
     }
     
     private CanvasView.OnDrawListener mDrawListener = new OnDrawListener() {
@@ -95,7 +89,7 @@ public class PaintAnimatorSetTest extends Activity {
     		canvas.drawText("Paint1", v.getWidth() / 2, v.getHeight() * 3 / 4, mPaint1);
     		canvas.drawText("Paint2", v.getWidth() / 4, v.getHeight() / 2, mPaint2);
     		canvas.drawText("Paint2", v.getWidth() * 3 / 4, v.getHeight() / 2, mPaint2);
-    		canvas.drawRect(20, 20, v.getWidth() - 20, v.getHeight() - 20, mPaint2);
+    		canvas.drawRect(40, 40, v.getWidth() - 40, v.getHeight() - 40, mPaint2);
     	}
     };
     
@@ -104,10 +98,12 @@ public class PaintAnimatorSetTest extends Activity {
 		public void onClick(View v) {
 			switch(v.getId()) {
 			case android.R.id.button1:
-				mPaintAnimatorSet.animate(true);
+//				mPaintAnimatorSet.animate(true);
+				mAnimatorSet.animate(true);
 				break;
 			case android.R.id.button2:
-				mPaintAnimatorSet.animate(false);
+				mAnimatorSet.animate(false);
+//				mPaintAnimatorSet.animate(false);
 				break;
 			case R.id.canvas:
 				Toast.makeText(v.getContext(), "Clicked.", Toast.LENGTH_SHORT).show();

@@ -4,19 +4,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <Button android:id="@android:id/button1"
+    <CheckBox android:id="@+id/checkboxFixed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Animation Start"/>
+        android:visibility="gone"
+        android:text="Fixed Watermark (100's)" />
     
-    <Button android:id="@android:id/button2"
+    <CheckBox android:id="@+id/checkboxFloating"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Animation Reverse"/>
+        android:visibility="gone"
+        android:text="Floating Watermark (10's)" />
     
-    <com.easetheworld.multirowbglisttest.AniListView
+    <com.easetheworld.multirowbglisttest.WatermarkListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:divider="@null"/>
 
 </LinearLayout>

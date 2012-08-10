@@ -28,7 +28,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.SeekBar;
-import dev.easetheworld.paintanimator.PaintAnimator2;
+import dev.easetheworld.paintanimator.PaintAnimator;
 
 /**
  * This application demonstrates the seeking capability of ValueAnimator. The SeekBar in the
@@ -40,7 +40,7 @@ public class AnimationSeeking extends Activity {
 	private CanvasView mCanvasView;
 	
 	private Paint mPaint;
-	private PaintAnimator2 mPaintAnimator;
+	private PaintAnimator mPaintAnimator;
 
     private static final int DURATION = 1500;
     private SeekBar mSeekBar;
@@ -59,7 +59,7 @@ public class AnimationSeeking extends Activity {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getScaledTextSize(this, 20));
         
-        mPaintAnimator = PaintAnimator2.ofTextSize(mPaint, getScaledTextSize(this, 40));
+        mPaintAnimator = PaintAnimator.ofTextSize(mPaint, getScaledTextSize(this, 40));
         mPaintAnimator.setInvalidateViews(mCanvasView);
         mPaintAnimator.setDuration(DURATION);
 

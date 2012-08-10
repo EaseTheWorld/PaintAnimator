@@ -19,13 +19,10 @@
 package com.easetheworld.multirowbglisttest;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -99,7 +96,7 @@ public class ChangingZOrderTest extends Activity {
 
 			@Override
 			public float getZOrder() {
-				return 1f - mPaintAnimatorSet.getFraction();
+				return 1f - mPaintAnimatorSet.getAnimatedFraction();
 			}
 		});
 		
@@ -114,7 +111,7 @@ public class ChangingZOrderTest extends Activity {
 
 			@Override
 			public float getZOrder() {
-				return mPaintAnimatorSet.getFraction();
+				return mPaintAnimatorSet.getAnimatedFraction();
 			}
 		});
     }

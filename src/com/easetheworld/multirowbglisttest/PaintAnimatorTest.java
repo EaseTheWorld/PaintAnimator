@@ -27,12 +27,10 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
-
 import dev.easetheworld.paintanimator.PaintAnimator;
 
 public class PaintAnimatorTest extends Activity {
@@ -48,18 +46,10 @@ public class PaintAnimatorTest extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.buttons_canvas);
+        setContentView(R.layout.checkbox_canvas);
         
         TextView text1 = (TextView)findViewById(android.R.id.text1);
         text1.setText("If you use PaintAnimator, each animation is independent.");
-        
-        Button button1 = (Button)findViewById(android.R.id.button1);
-        button1.setText("Paint1 Text Size : 30 <-> 60");
-        button1.setOnClickListener(mClickListener);
-        
-        Button button2 = (Button)findViewById(android.R.id.button2);
-        button2.setText("Paint2 Color : Blue <-> Red");
-        button2.setOnClickListener(mClickListener);
         
         mCanvasView = (CanvasView)findViewById(R.id.canvas);
         mCanvasView.setOnClickListener(mClickListener);
@@ -70,24 +60,48 @@ public class PaintAnimatorTest extends Activity {
         mPaint1.setTextAlign(Paint.Align.CENTER);
         mPaint1.setTextSize(getScaledTextSize(this, 30));
         
+        mPaint1TextSizeAnimator = PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60));
+        mPaint1TextSizeAnimator.setDuration(1000);
+        mPaint1TextSizeAnimator.setInvalidateViews(mCanvasView);
+        
         mPaint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint2.setColor(Color.BLUE);
         mPaint2.setTextAlign(Paint.Align.CENTER);
         mPaint2.setStyle(Paint.Style.STROKE);
         mPaint2.setTextSize(getScaledTextSize(this, 30));
         
-        mPaint1TextSizeAnimator = PaintAnimator.ofTextSize(mPaint1, getScaledTextSize(this, 60)).setDuration(1000).setInvalidateViews(mCanvasView);
-        mPaint2ColorAnimator = PaintAnimator.ofColor(mPaint2, Color.RED).setDuration(1000).setInvalidateViews(mCanvasView);
+        mPaint2ColorAnimator = PaintAnimator.ofColor(mPaint2, Color.BLUE, Color.YELLOW, Color.RED);
+        mPaint2ColorAnimator.setDuration(2000);
+        mPaint2ColorAnimator.setInvalidateViews(mCanvasView);
+        
+        CheckBox button1 = (CheckBox)findViewById(android.R.id.button1);
+        button1.setText("Paint1 Text Size : 30 <-> 60");
+        button1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mPaint1TextSizeAnimator.animate(isChecked);
+			}
+		});
+        
+        CheckBox button2 = (CheckBox)findViewById(android.R.id.button2);
+        button2.setText("Paint2 Color : Blue <-> Red");
+        button2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mPaint2ColorAnimator.animate(isChecked);
+			}
+		});
+        
     }
     
-    private CanvasView.OnDrawListener mDrawListener = new OnDrawListener() {
+    private CanvasView.OnDrawListener mDrawListener = new CanvasView.OnDrawListener() {
     	@Override
     	public void onDraw(View v, Canvas canvas) {
     		canvas.drawText("Paint1", v.getWidth() / 2, v.getHeight() / 4, mPaint1);
     		canvas.drawText("Paint1", v.getWidth() / 2, v.getHeight() * 3 / 4, mPaint1);
     		canvas.drawText("Paint2", v.getWidth() / 4, v.getHeight() / 2, mPaint2);
     		canvas.drawText("Paint2", v.getWidth() * 3 / 4, v.getHeight() / 2, mPaint2);
-    		canvas.drawRect(20, 20, v.getWidth() - 20, v.getHeight() - 20, mPaint2);
+    		canvas.drawRect(40, 40, v.getWidth() - 40, v.getHeight() - 40, mPaint2);
     	}
     };
     
@@ -95,12 +109,6 @@ public class PaintAnimatorTest extends Activity {
 		@Override
 		public void onClick(View v) {
 			switch(v.getId()) {
-			case android.R.id.button1:
-				mPaint1TextSizeAnimator.toggle();
-				break;
-			case android.R.id.button2:
-				mPaint2ColorAnimator.toggle();
-				break;
 			case R.id.canvas:
 				Toast.makeText(v.getContext(), "Clicked.", Toast.LENGTH_SHORT).show();
 				break;
