@@ -24,7 +24,6 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
-import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 
@@ -33,8 +32,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	private int mScrollState;
 	private long mMinTimeInterval;
 	private long mPreviousTime;
-	
-	private View mMiddleView;
 	
 	private final float mDensity;
 	private float[] mStepThresholds;
@@ -92,17 +89,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 		}
 	};
 	
-//	private void resetDiff(long currentTime) {
-//		mMiddleViewLastDiffSum = 0;
-//		mPreviousTime = currentTime;
-//	}
-//	
-//	private void saveMiddleView(AbsListView view) {
-//		mMiddleViewPosition = (view.getFirstVisiblePosition() + view.getLastVisiblePosition()) / 2;
-//		mMiddleView = view.getChildAt(mMiddleViewPosition - view.getFirstVisiblePosition());
-//		mMiddleViewTop = mMiddleView.getTop();
-//	}
-	
 	private int mAbsoluteScrollOffset;
 	
 	private int getAbsoluteScrollOffset(AbsListView view) {
@@ -110,18 +96,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	}
 	
 	private void checkScrollSpeedIfNecessary(AbsListView view, boolean force, boolean dispatchCallback) {
-		
-//		// update offset middle view diff
-//		int topDiff = 0;
-//		if (view.getPositionForView(mMiddleView) == mMiddleViewPosition) { // middle child view is still same view.
-//			int top = mMiddleView.getTop();
-//			topDiff = top - mMiddleViewTop;
-//		} else {
-//			android.util.Log.e("nora", "We missed the middle view");
-//		}
-//		mLastDiffSum += topDiff;
-//		saveMiddleView(view);
-		
 		long currentTime = SystemClock.uptimeMillis();
 		long timeInterval = currentTime - mPreviousTime;
 		if (force || timeInterval > mMinTimeInterval) {

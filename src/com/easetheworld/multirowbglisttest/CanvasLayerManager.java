@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.easetheworld.animator;
+package com.easetheworld.multirowbglisttest;
 
 import java.util.ArrayList;
 import java.util.Collections;

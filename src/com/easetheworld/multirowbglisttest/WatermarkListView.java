@@ -18,6 +18,8 @@
 
 package com.easetheworld.multirowbglisttest;
 
+import com.easetheworld.multirowbglisttest.CanvasLayerManager.CanvasLayer;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,13 +27,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import dev.easetheworld.animator.AnimatorPlayer;
-import dev.easetheworld.animator.CanvasLayerManager;
 import dev.easetheworld.animator.PaintAnimator;
-import dev.easetheworld.animator.CanvasLayerManager.CanvasLayer;
 
 public class WatermarkListView extends ListView {
 	
@@ -72,20 +71,6 @@ public class WatermarkListView extends ListView {
 			}
 		});
 		
-        setOnScrollListener(new OnScrollListener() {
-        	private boolean mIsScrolling = false;
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) { }
-
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				boolean isScrolling = scrollState != OnScrollListener.SCROLL_STATE_IDLE;
-				if (isScrolling != mIsScrolling) {
-					animate(isScrolling);
-					mIsScrolling = isScrolling;
-				}
-			}
-        });
 		setOnScrollListener(new OnScrollSpeedChangedListener(300, new float[] {1.0f}) {
 			@Override
 			protected void onScrollSpeedChanged(float speed, int step) {
@@ -102,15 +87,6 @@ public class WatermarkListView extends ListView {
 		return mItemFgPaint;
 	}
 	
-	public void animate(boolean forward) {
-//		android.util.Log.i("nora", "ListView animate "+forward);
-//		if (forward)
-//			mAnimatorSet.setStartDelay(500);
-//		else
-//			mAnimatorSet.setStartDelay(100);
-//		mAnimatorSet.animate(forward);
-	}
-
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);

@@ -28,12 +28,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easetheworld.multirowbglisttest.CanvasLayerManager.CanvasLayer;
 import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
 
 import dev.easetheworld.animator.AnimatorPlayer;
-import dev.easetheworld.animator.CanvasLayerManager;
 import dev.easetheworld.animator.PaintAnimator;
-import dev.easetheworld.animator.CanvasLayerManager.CanvasLayer;
 
 public class ChangingZOrderTest extends Activity {
 	
