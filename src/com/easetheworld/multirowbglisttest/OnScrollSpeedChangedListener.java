@@ -18,6 +18,8 @@
 
 package com.easetheworld.multirowbglisttest;
 
+import java.util.Arrays;
+
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
@@ -35,9 +37,15 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	private View mMiddleView;
 	
 	private final float mDensity;
+	private float[] mStepThresholds;
 	
 	public OnScrollSpeedChangedListener(int minTimeMsInterval) {
+		this(minTimeMsInterval, null);
+	}
+	
+	public OnScrollSpeedChangedListener(int minTimeMsInterval, float[] stepThresholds) {
 		mMinTimeInterval = minTimeMsInterval;
+		mStepThresholds = stepThresholds;
 		mScrollState = OnScrollListener.SCROLL_STATE_IDLE;
 		mDensity = Resources.getSystem().getDisplayMetrics().density;
 	}
@@ -45,7 +53,7 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	/**
 	 * @param (dip difference / time difference)
 	 */
-	protected abstract void onScrollSpeedChanged(float speed);
+	protected abstract void onScrollSpeedChanged(float speed, int step);
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -123,10 +131,28 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 			mPreviousTime = currentTime;
 			if (dispatchCallback) {
 				if (timeInterval != 0)
-					onScrollSpeedChanged((float)diff / timeInterval / mDensity);
+					dispatchScrollSpeedChanged((float)diff / timeInterval / mDensity);
 				if (mScrollState == OnScrollListener.SCROLL_STATE_IDLE && diff != 0) // if scroll stopped, call one more for speed 0
-					onScrollSpeedChanged(0);
+					dispatchScrollSpeedChanged(0);
 			}
 		}
+	}
+	
+	private void dispatchScrollSpeedChanged(float speed) {
+		if (speed < 0) speed = -speed;
+		int step = 0;
+		if (mStepThresholds != null) {
+			step = Arrays.binarySearch(mStepThresholds, speed);
+			if (step < 0)
+				step = -step - 1;
+		}
+		onScrollSpeedChanged(speed, step);
+	}
+	
+	protected int getStepMax() {
+		if (mStepThresholds != null)
+			return mStepThresholds.length;
+		else
+			return 0;
 	}
 }

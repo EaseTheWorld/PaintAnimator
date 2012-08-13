@@ -51,7 +51,7 @@ public class ChangingZOrderTest extends Activity {
         setContentView(R.layout.buttons_canvas);
         
         TextView text1 = (TextView)findViewById(android.R.id.text1);
-        text1.setText("Change the z-order of overlapped layers by alpha and drawing order.");
+        text1.setText("Change the z-order of overlapped layers with alpha and drawing order.");
         
         Button button1 = (Button)findViewById(android.R.id.button1);
         button1.setText("Blue to the top.");

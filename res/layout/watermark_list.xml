@@ -4,17 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <CheckBox android:id="@+id/checkboxFixed"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="Fixed Watermark (100's)" />
-    
-    <CheckBox android:id="@+id/checkboxFloating"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="Floating Watermark (10's)" />
+        android:text="When scroll fast, watermark comes forward. Fixed watermark is for big change(100s), floating watermark is for small change(10s)." />
     
     <com.easetheworld.multirowbglisttest.WatermarkListView
         android:id="@android:id/list"

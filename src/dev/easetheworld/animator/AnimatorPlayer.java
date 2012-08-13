@@ -69,6 +69,8 @@ public class AnimatorPlayer {
 	}
 	
 	private void seekToInternal(int time) {
+		if (mCurrentTime == time)
+			return;
 		for (ValueAnimator animator : mList) {
 			animator.setCurrentPlayTime(time);
 		}
@@ -86,6 +88,10 @@ public class AnimatorPlayer {
 	}
 	
 	private void setTimeRange(int startTime, int endTime) {
+		if (endTime < 0)
+			endTime = 0;
+		else if (endTime > mDuration)
+			endTime = mDuration;
 		mTimeAnimator.cancel();
 		mTimeAnimator.setIntValues(startTime, endTime);
 		mTimeAnimator.setDuration(Math.abs(endTime - startTime));

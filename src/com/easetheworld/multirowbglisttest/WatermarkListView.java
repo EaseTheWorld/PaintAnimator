@@ -45,7 +45,7 @@ public class WatermarkListView extends ListView {
 		
 		setCacheColorHint(Color.TRANSPARENT); // to use listview's bg
 		
-		mAnimatorPlayer = new AnimatorPlayer(1000);
+		mAnimatorPlayer = new AnimatorPlayer(300);
 		
 		mListBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mListBgPaint.setTextAlign(Paint.Align.CENTER);
@@ -68,7 +68,6 @@ public class WatermarkListView extends ListView {
 			
 			@Override
 			public void onTimeChanged(int currentTime) {
-				android.util.Log.i("nora", "invalidate "+currentTime);
 				invalidateViews();
 			}
 		});
@@ -87,16 +86,10 @@ public class WatermarkListView extends ListView {
 				}
 			}
         });
-		setOnScrollListener(new OnScrollSpeedChangedListener(300) {
-			
+		setOnScrollListener(new OnScrollSpeedChangedListener(300, new float[] {1.0f}) {
 			@Override
-			protected void onScrollSpeedChanged(float speed) {
-				android.util.Log.i("nora", "speed="+speed);
-				if (speed < 0) speed = -speed;
-				if (speed > 2f)
-					speed = 2f;
-				int speedTime = (int)((float)mAnimatorPlayer.getDuration() * speed / 2f);
-				mAnimatorPlayer.playTo(speedTime);
+			protected void onScrollSpeedChanged(float speed, int step) {
+				mAnimatorPlayer.playTo(step * mAnimatorPlayer.getDuration() / getStepMax());
 			}
 		});
 	}

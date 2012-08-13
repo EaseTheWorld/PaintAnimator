@@ -38,20 +38,6 @@ public class WatermarkListTest extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.watermark_list);
         
-        CheckBox checkboxFixed = (CheckBox)findViewById(R.id.checkboxFixed);
-        checkboxFixed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			}
-        });
-        
-        CheckBox checkboxFloating = (CheckBox)findViewById(R.id.checkboxFloating);
-        checkboxFloating.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-			}
-        });
-        
         Integer[] data = new Integer[1000];
         for (int i=0; i<data.length; i++)
         	data[i] = i + 1;
@@ -78,9 +64,9 @@ public class WatermarkListTest extends Activity {
 			}
 			int data = getItem(position);
 			if ((data & 1) == 0)
-				v.setText(String.format("Hello world. %d is even.", data, data));
+				v.setText(String.format("%03d is even. Hello world.", data, data));
 			else
-				v.setText(String.format("How are you? %d is odd.", data, data));
+				v.setText(String.format("%03d is odd. How are you?", data, data));
 			WatermarkListView l = (WatermarkListView)parent;
 			v.setTextColor(l.getItemFgPaint().getColor());
 			return v;
