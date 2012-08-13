@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * https://github.com/EaseTheWorld/MultirowBgListTest
+ * https://github.com/EaseTheWorld/PaintAnimatorTest
  */
 
-package com.easetheworld.multirowbglisttest;
+package com.easetheworld.paintanimatortest;
 
 import android.app.Activity;
 import android.graphics.Canvas;
@@ -28,8 +28,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.easetheworld.multirowbglisttest.CanvasLayerManager.CanvasLayer;
-import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
+import com.easetheworld.paintanimatortest.CanvasLayerManager.CanvasLayer;
+import com.easetheworld.paintanimatortest.CanvasView.OnDrawListener;
 
 import dev.easetheworld.animator.AnimatorPlayer;
 import dev.easetheworld.animator.PaintAnimator;

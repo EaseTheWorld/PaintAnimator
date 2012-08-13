@@ -1,4 +1,4 @@
-package com.easetheworld.multirowbglisttest;
+package com.easetheworld.paintanimatortest;
 
 import java.util.ArrayList;
 import java.util.HashMap;

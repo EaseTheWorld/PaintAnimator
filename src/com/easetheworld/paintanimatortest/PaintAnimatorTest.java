@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * https://github.com/EaseTheWorld/MultirowBgListTest
+ * https://github.com/EaseTheWorld/PaintAnimatorTest
  */
 
-package com.easetheworld.multirowbglisttest;
+package com.easetheworld.paintanimatortest;
 
 import android.app.Activity;
 import android.content.Context;
@@ -84,7 +84,7 @@ public class PaintAnimatorTest extends Activity {
 		});
         
         CheckBox button2 = (CheckBox)findViewById(android.R.id.button2);
-        button2.setText("Paint2 Color : Blue <-> Red");
+        button2.setText("Paint2 Color : Blue <-Yellow-> Red");
         button2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

@@ -24,7 +24,7 @@
         android:text="AnimatorPlayer can animate ValueAnimators simultaneously which have different Interpolator. It can also seek and play to any time like a movie player."
         />
     
-    <com.easetheworld.multirowbglisttest.CanvasView
+    <com.easetheworld.paintanimatortest.CanvasView
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="80dip"

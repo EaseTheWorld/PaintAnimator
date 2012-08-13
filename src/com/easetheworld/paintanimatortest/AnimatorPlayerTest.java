@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package com.easetheworld.multirowbglisttest;
+package com.easetheworld.paintanimatortest;
 
-// Need the following import to get access to the app resources, since this
-// class is in a sub-package.
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;

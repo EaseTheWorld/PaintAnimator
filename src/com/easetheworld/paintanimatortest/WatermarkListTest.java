@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * https://github.com/EaseTheWorld/MultirowBgListTest
+ * https://github.com/EaseTheWorld/PaintAnimatorTest
  */
 
-package com.easetheworld.multirowbglisttest;
+package com.easetheworld.paintanimatortest;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,10 +24,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
-import com.easetheworld.multirowbglisttest.WatermarkListView.WatermarkItemTextView;
+import com.easetheworld.paintanimatortest.WatermarkListView.WatermarkItemTextView;
 
 public class WatermarkListTest extends Activity {
 	

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:text="When scroll fast, watermark comes forward. Fixed watermark is for big change(100s), floating watermark is for small change(10s)." />
     
-    <com.easetheworld.multirowbglisttest.WatermarkListView
+    <com.easetheworld.paintanimatortest.WatermarkListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * https://github.com/EaseTheWorld/MultirowBgListTest
+ * https://github.com/EaseTheWorld/PaintAnimatorTest
  */
 
 package dev.easetheworld.animator;
