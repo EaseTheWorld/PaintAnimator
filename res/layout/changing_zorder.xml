@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <TextView android:id="@android:id/text1"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Change the z-order of overlapped layers with alpha and drawing order." />
     
     <Button android:id="@android:id/button1"
         android:layout_width="match_parent"
@@ -19,9 +20,6 @@
     <com.easetheworld.paintanimatortest.CanvasView
         android:id="@+id/canvas"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="20sp"
-        android:gravity="left|top"
-        android:text="Click me."/>
+        android:layout_height="match_parent" />
 
 </LinearLayout>

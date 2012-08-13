@@ -1,11 +1,5 @@
-Android Multirow Background ListView
+Android PaintAnimator
 ====================================
-
-Set text/bitmap background which is laid on multiple rows.
-
-![screenshot0](https://raw.github.com/EaseTheWorld/MultirowBgListTest/master/screenshot_multirowbg0.png)
-![screenshot1](https://raw.github.com/EaseTheWorld/MultirowBgListTest/master/screenshot_multirowbg1.png)
-![screenshot2](https://raw.github.com/EaseTheWorld/MultirowBgListTest/master/screenshot_multirowbg2.png)
 
 Release Notes
 -------------
@@ -13,6 +7,6 @@ Release Notes
 
 Source
 ------
-https://github.com/EaseTheWorld/MultirowBgListTest
+https://github.com/EaseTheWorld/PaintAnimator
 
 Made by **EaseTheWorld**

@@ -108,9 +108,9 @@ public class PaintAnimator extends ValueAnimator {
 		return animator;
 	}
 	
-	public static PaintAnimator ofStrokeWidth(Paint paint, int... value) {
+	public static PaintAnimator ofStrokeWidth(Paint paint, float... value) {
 		PaintAnimator animator = new PaintAnimator(paint, STROKE_WIDTH);
-		animator.setIntValuesHelper(value);
+		animator.setFloatValuesHelper(value);
 		return animator;
 	}
 	
@@ -175,7 +175,7 @@ public class PaintAnimator extends ValueAnimator {
 			mPaint.setTextSkewX((Float)value);
 			break;
 		case STROKE_WIDTH:
-			mPaint.setStrokeWidth((Integer)value);
+			mPaint.setStrokeWidth((Float)value);
 			break;
 		}
 	}
