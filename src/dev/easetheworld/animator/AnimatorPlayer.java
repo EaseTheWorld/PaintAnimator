@@ -54,10 +54,6 @@ public class AnimatorPlayer {
 		return mCurrentTime;
 	}
 	
-//	public void pause() {
-//		mTimeAnimator.cancel();
-//	}
-	
 	public void play(boolean forward) {
 		if (forward)
 			playTo(mDuration);
