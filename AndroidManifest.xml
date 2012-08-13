@@ -16,19 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PaintAnimatorTest" android:label="Animator">
+        <activity android:name=".PaintAnimatorTest" android:label="PaintAnimator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
-        <activity android:name=".PaintAnimatorSetTest" android:label="AnimatorSet">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".AnimationSeeking" android:label="Seek">
+        <activity android:name=".AnimatorPlayerTest" android:label="Animator Player">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.SAMPLE_CODE" />

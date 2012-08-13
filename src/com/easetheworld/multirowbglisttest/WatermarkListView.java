@@ -28,14 +28,14 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
-import dev.easetheworld.paintanimator.CanvasLayerManager;
-import dev.easetheworld.paintanimator.CanvasLayerManager.CanvasLayer;
-import dev.easetheworld.paintanimator.PaintAnimator;
-import dev.easetheworld.paintanimator.PaintAnimatorSet;
+import dev.easetheworld.animator.AnimatorPlayer;
+import dev.easetheworld.animator.CanvasLayerManager;
+import dev.easetheworld.animator.PaintAnimator;
+import dev.easetheworld.animator.CanvasLayerManager.CanvasLayer;
 
 public class WatermarkListView extends ListView {
 	
-	private PaintAnimatorSet mAnimatorSet;
+	private AnimatorPlayer mAnimatorPlayer;
 	private Paint mListBgPaint;
 	private Paint mItemBgPaint;
 	private Paint mItemFgPaint;
@@ -45,30 +45,30 @@ public class WatermarkListView extends ListView {
 		
 		setCacheColorHint(Color.TRANSPARENT); // to use listview's bg
 		
-		mAnimatorSet = new PaintAnimatorSet();
-		mAnimatorSet.setDuration(1000);
+		mAnimatorPlayer = new AnimatorPlayer(1000);
 		
 		mListBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mListBgPaint.setTextAlign(Paint.Align.CENTER);
 		mListBgPaint.setColor(Color.RED);
 		mListBgPaint.setAlpha(0x60);
 		mListBgPaint.setTextSize(100);
-		mAnimatorSet.add(PaintAnimator.ofAlpha(mListBgPaint, 0xd0));
+		mAnimatorPlayer.add(PaintAnimator.ofAlpha(mListBgPaint, 0xd0));
 		
 		mItemBgPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		mItemBgPaint.setTextAlign(Paint.Align.CENTER);
 		mItemBgPaint.setColor(Color.YELLOW);
 		mItemBgPaint.setAlpha(0x60);
-		mAnimatorSet.add(PaintAnimator.ofAlpha(mItemBgPaint, 0xd0));
+		mAnimatorPlayer.add(PaintAnimator.ofAlpha(mItemBgPaint, 0xd0));
 		
 		mItemFgPaint = new Paint();
 		mItemFgPaint.setColor(Color.WHITE);
-		mAnimatorSet.add(PaintAnimator.ofColor(mItemFgPaint, 0x40ffffff));
+		mAnimatorPlayer.add(PaintAnimator.ofColor(mItemFgPaint, 0x40ffffff));
 		
-		mAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
+		mAnimatorPlayer.setOnTimeChangedListener(new AnimatorPlayer.OnTimeChangedListener() {
+			
 			@Override
-			public void onInvalidate() {
-				android.util.Log.i("nora", "invalidate");
+			public void onTimeChanged(int currentTime) {
+				android.util.Log.i("nora", "invalidate "+currentTime);
 				invalidateViews();
 			}
 		});
@@ -87,17 +87,18 @@ public class WatermarkListView extends ListView {
 				}
 			}
         });
-//		setOnScrollListener(new OnScrollSpeedChangedListener(300) {
-//			
-//			@Override
-//			protected void onScrollSpeedChanged(float speed) {
-//				if (speed < 0) speed = -speed;
-//				if (speed > 2f)
-//					speed = 2f;
-//				int speedTime = (int)((float)mAnimatorSet.getDuration() * speed / 2f);
-//				mAnimatorSet.setCurrentPlayTime(speedTime);
-//			}
-//		});
+		setOnScrollListener(new OnScrollSpeedChangedListener(300) {
+			
+			@Override
+			protected void onScrollSpeedChanged(float speed) {
+				android.util.Log.i("nora", "speed="+speed);
+				if (speed < 0) speed = -speed;
+				if (speed > 2f)
+					speed = 2f;
+				int speedTime = (int)((float)mAnimatorPlayer.getDuration() * speed / 2f);
+				mAnimatorPlayer.playTo(speedTime);
+			}
+		});
 	}
 	
 	public Paint getItemBgPaint() {
@@ -109,12 +110,12 @@ public class WatermarkListView extends ListView {
 	}
 	
 	public void animate(boolean forward) {
-		android.util.Log.i("nora", "ListView animate "+forward);
-		if (forward)
-			mAnimatorSet.setStartDelay(500);
-		else
-			mAnimatorSet.setStartDelay(100);
-		mAnimatorSet.animate(forward);
+//		android.util.Log.i("nora", "ListView animate "+forward);
+//		if (forward)
+//			mAnimatorSet.setStartDelay(500);
+//		else
+//			mAnimatorSet.setStartDelay(100);
+//		mAnimatorSet.animate(forward);
 	}
 
 	@Override
@@ -125,8 +126,12 @@ public class WatermarkListView extends ListView {
 		canvas.drawText(String.format("%03d", middleData), getWidth() / 2, getHeight() / 2, mListBgPaint);
 	}
 	
-	public float getPaintAnimatorFraction() {
-		return mAnimatorSet.getAnimatedFraction();
+	public int getAnimatorDuration() {
+		return mAnimatorPlayer.getDuration();
+	}
+	
+	public int getAnimatorCurrentTime() {
+		return mAnimatorPlayer.getCurrentTime();
 	}
 	
 	public static class WatermarkItemTextView extends TextView {
@@ -144,8 +149,8 @@ public class WatermarkListView extends ListView {
 				}
 	
 				@Override
-				public float getZOrder() {
-					return 1f - getWatermarkListView().getPaintAnimatorFraction();
+				public int getZOrder() {
+					return getWatermarkListView().getAnimatorDuration() - getWatermarkListView().getAnimatorCurrentTime();
 				}
 			});
 			
@@ -160,8 +165,8 @@ public class WatermarkListView extends ListView {
 				}
 	
 				@Override
-				public float getZOrder() {
-					return getWatermarkListView().getPaintAnimatorFraction();
+				public int getZOrder() {
+					return getWatermarkListView().getAnimatorCurrentTime();
 				}
 			});
 		}

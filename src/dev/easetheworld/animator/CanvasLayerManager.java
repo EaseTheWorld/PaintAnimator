@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.easetheworld.paintanimator;
+package dev.easetheworld.animator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +54,7 @@ public class CanvasLayerManager {
 
 		public abstract void onDraw(View v, Canvas canvas);
 
-		protected float getZOrder() {
+		protected int getZOrder() {
 			return 0; // default z-order is 0
 		}
 

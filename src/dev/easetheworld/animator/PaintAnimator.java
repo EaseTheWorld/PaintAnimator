@@ -16,7 +16,7 @@
  * https://github.com/EaseTheWorld/MultirowBgListTest
  */
 
-package dev.easetheworld.paintanimator;
+package dev.easetheworld.animator;
 
 import android.graphics.Paint;
 import android.view.View;
@@ -119,7 +119,7 @@ public class PaintAnimator extends ValueAnimator {
 		return this;
 	}
 	
-	protected boolean mPlayForward = true;
+	private boolean mPlayForward = true;
 	
 	public void animate(boolean playForward) {
 		boolean isReverse = playForward != mPlayForward;

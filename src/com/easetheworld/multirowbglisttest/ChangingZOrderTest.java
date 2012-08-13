@@ -30,10 +30,10 @@ import android.widget.Toast;
 
 import com.easetheworld.multirowbglisttest.CanvasView.OnDrawListener;
 
-import dev.easetheworld.paintanimator.CanvasLayerManager;
-import dev.easetheworld.paintanimator.CanvasLayerManager.CanvasLayer;
-import dev.easetheworld.paintanimator.PaintAnimator;
-import dev.easetheworld.paintanimator.PaintAnimatorSet;
+import dev.easetheworld.animator.AnimatorPlayer;
+import dev.easetheworld.animator.CanvasLayerManager;
+import dev.easetheworld.animator.PaintAnimator;
+import dev.easetheworld.animator.CanvasLayerManager.CanvasLayer;
 
 public class ChangingZOrderTest extends Activity {
 	
@@ -43,7 +43,7 @@ public class ChangingZOrderTest extends Activity {
 	private Paint mPaintR;
 	private Paint mPaintB;
 	
-	private PaintAnimatorSet mPaintAnimatorSet;
+	private AnimatorPlayer mAnimatorPlayer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,16 +73,9 @@ public class ChangingZOrderTest extends Activity {
         mPaintB.setColor(Color.BLUE);
         mPaintB.setAlpha(0x80);
         
-        mPaintAnimatorSet = new PaintAnimatorSet();
-        mPaintAnimatorSet.add(PaintAnimator.ofAlpha(mPaintR, 0x80));
-        mPaintAnimatorSet.add(PaintAnimator.ofAlpha(mPaintB, 0xff));
-        mPaintAnimatorSet.setDuration(1000);
-        mPaintAnimatorSet.setOnInvalidateListener(new PaintAnimatorSet.OnInvalidateListener() {
-			@Override
-			public void onInvalidate() {
-				mCanvasView.invalidate();
-			}
-        });
+        mAnimatorPlayer = new AnimatorPlayer(1000);
+        mAnimatorPlayer.add(PaintAnimator.ofAlpha(mPaintR, 0x80));
+        mAnimatorPlayer.add(PaintAnimator.ofAlpha(mPaintB, 0xff).setInvalidateViews(mCanvasView));
         
 		mCanvasLayerManager = new CanvasLayerManager();
 		mCanvasLayerManager.add(new CanvasLayer() {
@@ -95,8 +88,8 @@ public class ChangingZOrderTest extends Activity {
 			}
 
 			@Override
-			public float getZOrder() {
-				return 1f - mPaintAnimatorSet.getAnimatedFraction();
+			public int getZOrder() {
+				return mAnimatorPlayer.getDuration() - mAnimatorPlayer.getCurrentTime();
 			}
 		});
 		
@@ -110,8 +103,8 @@ public class ChangingZOrderTest extends Activity {
 			}
 
 			@Override
-			public float getZOrder() {
-				return mPaintAnimatorSet.getAnimatedFraction();
+			public int getZOrder() {
+				return mAnimatorPlayer.getCurrentTime();
 			}
 		});
     }
@@ -128,10 +121,12 @@ public class ChangingZOrderTest extends Activity {
 		public void onClick(View v) {
 			switch(v.getId()) {
 			case android.R.id.button1:
-				mPaintAnimatorSet.animate(true);
+				mAnimatorPlayer.play(true);
+//				mPaintAnimatorSet.animate(true);
 				break;
 			case android.R.id.button2:
-				mPaintAnimatorSet.animate(false);
+				mAnimatorPlayer.play(false);
+//				mPaintAnimatorSet.animate(false);
 				break;
 			case R.id.canvas:
 				Toast.makeText(v.getContext(), "Clicked.", Toast.LENGTH_SHORT).show();

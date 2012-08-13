@@ -31,7 +31,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import dev.easetheworld.paintanimator.PaintAnimator;
+import dev.easetheworld.animator.PaintAnimator;
 
 public class PaintAnimatorTest extends Activity {
 	

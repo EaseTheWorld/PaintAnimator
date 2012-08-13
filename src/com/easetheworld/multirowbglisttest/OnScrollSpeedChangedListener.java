@@ -33,9 +33,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	private long mPreviousTime;
 	
 	private View mMiddleView;
-	private int mMiddleViewTop;
-	private int mMiddleViewPosition;
-	private int mMiddleViewLastDiffSum;
 	
 	private final float mDensity;
 	
@@ -58,7 +55,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
-//		android.util.Log.i("nora", "scrollState="+scrollState);
 		if (mScrollState == OnScrollListener.SCROLL_STATE_IDLE && scrollState != mScrollState) { // scroll start
 			mAbsoluteScrollOffset = getAbsoluteScrollOffset(view);
 			mPreviousTime = SystemClock.uptimeMillis();
@@ -84,21 +80,20 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
-			android.util.Log.i("nora", "message handle");
 			checkScrollSpeedIfNecessary((AbsListView)msg.obj, true, true);
 		}
 	};
 	
-	private void resetDiff(long currentTime) {
-		mMiddleViewLastDiffSum = 0;
-		mPreviousTime = currentTime;
-	}
-	
-	private void saveMiddleView(AbsListView view) {
-		mMiddleViewPosition = (view.getFirstVisiblePosition() + view.getLastVisiblePosition()) / 2;
-		mMiddleView = view.getChildAt(mMiddleViewPosition - view.getFirstVisiblePosition());
-		mMiddleViewTop = mMiddleView.getTop();
-	}
+//	private void resetDiff(long currentTime) {
+//		mMiddleViewLastDiffSum = 0;
+//		mPreviousTime = currentTime;
+//	}
+//	
+//	private void saveMiddleView(AbsListView view) {
+//		mMiddleViewPosition = (view.getFirstVisiblePosition() + view.getLastVisiblePosition()) / 2;
+//		mMiddleView = view.getChildAt(mMiddleViewPosition - view.getFirstVisiblePosition());
+//		mMiddleViewTop = mMiddleView.getTop();
+//	}
 	
 	private int mAbsoluteScrollOffset;
 	

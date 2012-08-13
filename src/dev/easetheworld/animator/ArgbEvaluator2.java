@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package dev.easetheworld.paintanimator;
+package dev.easetheworld.animator;
 
 import com.nineoldandroids.animation.TypeEvaluator;
 
