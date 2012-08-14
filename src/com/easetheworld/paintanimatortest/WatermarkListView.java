@@ -18,7 +18,7 @@
 
 package com.easetheworld.paintanimatortest;
 
-import com.easetheworld.paintanimatortest.CanvasLayerManager.CanvasLayer;
+import java.util.Arrays;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -29,6 +29,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.easetheworld.paintanimatortest.CanvasLayerManager.CanvasLayer;
+
 import dev.easetheworld.animator.AnimatorPlayer;
 import dev.easetheworld.animator.PaintAnimator;
 
@@ -71,10 +74,21 @@ public class WatermarkListView extends ListView {
 			}
 		});
 		
-		setOnScrollListener(new OnScrollSpeedChangedListener(300, new float[] {1.0f}) {
+		setOnScrollListener(new OnScrollSpeedChangedListener(300) {
+			
+			private float[] mStepThresholds = new float[] {0.7f, 1.2f};
+			
+			private int convertToTime(float speed) {
+				if (speed < 0) speed = -speed;
+				int step = Arrays.binarySearch(mStepThresholds, speed);
+				if (step < 0)
+					step = -step - 1;
+				return step * mAnimatorPlayer.getDuration() / mStepThresholds.length;
+			}
+			
 			@Override
-			protected void onScrollSpeedChanged(float speed, int step) {
-				mAnimatorPlayer.playTo(step * mAnimatorPlayer.getDuration() / getStepMax());
+			protected void onScrollSpeedChanged(float speed) {
+				mAnimatorPlayer.playTo(convertToTime(speed));
 			}
 		});
 	}

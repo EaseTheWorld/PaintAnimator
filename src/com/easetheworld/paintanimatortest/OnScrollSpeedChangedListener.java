@@ -18,8 +18,6 @@
 
 package com.easetheworld.paintanimatortest;
 
-import java.util.Arrays;
-
 import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Message;
@@ -34,15 +32,9 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	private long mPreviousTime;
 	
 	private final float mDensity;
-	private float[] mStepThresholds;
 	
 	public OnScrollSpeedChangedListener(int minTimeMsInterval) {
-		this(minTimeMsInterval, null);
-	}
-	
-	public OnScrollSpeedChangedListener(int minTimeMsInterval, float[] stepThresholds) {
 		mMinTimeInterval = minTimeMsInterval;
-		mStepThresholds = stepThresholds;
 		mScrollState = OnScrollListener.SCROLL_STATE_IDLE;
 		mDensity = Resources.getSystem().getDisplayMetrics().density;
 	}
@@ -50,7 +42,7 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	/**
 	 * @param (dip difference / time difference)
 	 */
-	protected abstract void onScrollSpeedChanged(float speed, int step);
+	protected abstract void onScrollSpeedChanged(float speed);
 
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -113,20 +105,6 @@ public abstract class OnScrollSpeedChangedListener implements OnScrollListener {
 	}
 	
 	private void dispatchScrollSpeedChanged(float speed) {
-		if (speed < 0) speed = -speed;
-		int step = 0;
-		if (mStepThresholds != null) {
-			step = Arrays.binarySearch(mStepThresholds, speed);
-			if (step < 0)
-				step = -step - 1;
-		}
-		onScrollSpeedChanged(speed, step);
-	}
-	
-	protected int getStepMax() {
-		if (mStepThresholds != null)
-			return mStepThresholds.length;
-		else
-			return 0;
+		onScrollSpeedChanged(speed);
 	}
 }
