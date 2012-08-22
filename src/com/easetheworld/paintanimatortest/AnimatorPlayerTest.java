@@ -89,7 +89,7 @@ public class AnimatorPlayerTest extends Activity {
         animText3.setInterpolator(new DecelerateInterpolator());
         mAnimatorPlayer.add(animText3);
         
-	    SeekBar seekBar = (SeekBar) findViewById(android.R.id.progress);
+	    final SeekBar seekBar = (SeekBar) findViewById(android.R.id.progress);
         seekBar.setMax(DURATION);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStopTrackingTouch(SeekBar seekBar) { }
@@ -97,16 +97,26 @@ public class AnimatorPlayerTest extends Activity {
             public void onStartTrackingTouch(SeekBar seekBar) { }
 
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            	switch(mRadioGroup.getCheckedRadioButtonId()) {
-            	case android.R.id.button1:
-	            	mAnimatorPlayer.seekTo(progress);
-            		break;
-            	case android.R.id.button2:
-	            	mAnimatorPlayer.playTo(progress);
-            		break;
+            	if (fromUser) {
+            		switch(mRadioGroup.getCheckedRadioButtonId()) {
+            		case android.R.id.button1:
+            			mAnimatorPlayer.seekTo(progress);
+            			break;
+            		case android.R.id.button2:
+            			mAnimatorPlayer.playTo(progress);
+            			break;
+            		}
             	}
             }
         });
+        
+        
+        mAnimatorPlayer.setOnTimeChangedListener(new AnimatorPlayer.OnTimeChangedListener() {
+			@Override
+			public void onTimeChanged(int currentTime) {
+				seekBar.setProgress(currentTime);
+			}
+		});
     }
     
     private CanvasView.OnDrawListener mDrawListener = new CanvasView.OnDrawListener() {
